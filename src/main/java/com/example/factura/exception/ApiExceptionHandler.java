@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,5 +25,12 @@ public class ApiExceptionHandler {
                 .forEach(e -> campos.put(e.getField(), e.getDefaultMessage()));
         return ResponseEntity.badRequest()
                 .body(Map.of("error", "Datos inválidos", "campos", campos));
+    }
+
+    /** Login con credenciales incorrectas: 401 en lugar de un error 500. */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Map<String, String>> credencialesInvalidas(AuthenticationException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "Usuario o contraseña incorrectos"));
     }
 }
