@@ -87,18 +87,40 @@ Importar `postman/NicaMarket-JWT.postman_collection.json` y ejecutar las carpeta
 | P1 | GET `/api/auth/perfil` | ADMIN | 200 (usuario y roles) |
 | P2 | GET `/api/auth/perfil` | Sin token | 401 |
 
+Resultado de la ejecución completa (Runner): **23 de 23 pruebas superadas, 0 fallidas**.
+
+![Runner: todas las pruebas pasan](evidencias/00_runner_todas_pasan.jpg)
+
 ### Cinco evidencias del reto final y por qué se obtuvo cada código
 
 1. **R1 · GET categorías con USER → 200 OK.** El token es válido (firma y vencimiento correctos) y
    el claim `roles` contiene `USER`, que tiene permiso de consulta.
+
+   ![01_R1_get_categorias_user_200](evidencias/01_R1_get_categorias_user_200.jpg)
+
 2. **R2 · POST categoría con USER → 403 Forbidden.** El usuario sí está autenticado, pero crear
    categorías exige `ROLE_ADMIN`: falla la autorización, no la autenticación.
+
+   ![02_R2_post_categoria_user_403](evidencias/02_R2_post_categoria_user_403.jpg)
+
 3. **R5 · POST categoría con ADMIN → 201 Created.** El rol ADMIN tiene permiso y los datos cumplen
    las validaciones de la entidad, así que la categoría se crea.
+
+   ![03_R5_post_categoria_admin_201](evidencias/03_R5_post_categoria_admin_201.jpg)
+
 4. **R8 · GET categorías sin token → 401 Unauthorized.** La ruta está protegida y la petición no
    trae `Authorization`, por lo que no hay identidad que autorizar.
+
+   ![04_R8_get_categorias_sin_token_401](evidencias/04_R8_get_categorias_sin_token_401.jpg)
+
 5. **R9 · GET categorías con token modificado → 401 Unauthorized.** Al alterar el token, la firma
    HS256 ya no coincide y `JwtDecoder` lo rechaza.
+
+   ![05_R9_get_categorias_token_invalido_401](evidencias/05_R9_get_categorias_token_invalido_401.jpg)
+
+### Reto adicional: perfil
+
+![P1 perfil con token ADMIN](evidencias/06_P1_perfil_admin_200.jpg)
 
 ## 6. Preguntas de cierre
 
